@@ -136,7 +136,7 @@ public class JwtServiceImpl {
             return userRepository.findByEmail ( userEmail )
                     .orElseThrow (()->  new UserNotFoundException ( "User " + userEmail + " not found" ));
         }catch (UserNotFoundException e){
-
+            log.error ( "fetching user with auth header failed" );
             throw new UserNotFoundException (e.getMessage ());
         }
     }

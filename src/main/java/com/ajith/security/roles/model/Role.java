@@ -1,10 +1,12 @@
-package com.ajith.security.user.model;
+package com.ajith.security.roles.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 @Entity
+@Builder
 @Data
 public class Role {
     @Id

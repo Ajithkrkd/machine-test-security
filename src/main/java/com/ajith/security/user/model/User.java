@@ -1,6 +1,7 @@
 package com.ajith.security.user.model;
 
 
+import com.ajith.security.roles.model.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

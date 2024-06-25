@@ -1,4 +1,4 @@
-package com.ajith.security.user.dto;
+package com.ajith.security.admin.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,5 +7,4 @@ import lombok.Setter;
 @Setter
 public class RoleRequest {
     private String roleName;
-    private String roleDescription;
 }

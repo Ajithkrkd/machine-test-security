@@ -3,13 +3,9 @@ package com.ajith.security.admin.controller;
 import com.ajith.security.admin.service.IAdminService;
 import com.ajith.security.user.dto.BasicResponse;
 import com.ajith.security.user.dto.UserDetailsResponse;
-import com.ajith.security.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,17 +15,20 @@ import java.util.List;
 public class AdminController {
 
     private final IAdminService iAdminService;
-    @GetMapping("")
-    public ResponseEntity<String>getAdmin(){
-        return ResponseEntity.ok ( "admin is here " );
-    }
 
     @GetMapping("/users/all")
     public ResponseEntity< List<UserDetailsResponse> > getAllUsers(){
         return iAdminService.getAllUsers();
     }
 
-    public ResponseEntity< BasicResponse > blockUser(@PathVariable ("id") Long userId){
+    @PostMapping("/user/block/{id}")
+    public ResponseEntity< BasicResponse > toggleUserBlockStatus(@PathVariable ("id") Integer userId){
+        return iAdminService.toggleUserblockStatus (userId);
+    }
 
+    @GetMapping("/user/{id}")
+    public ResponseEntity< UserDetailsResponse > getUserDetails(@PathVariable ("id") Integer userId)
+    {
+        return iAdminService.getUserDetails (userId);
     }
 }
