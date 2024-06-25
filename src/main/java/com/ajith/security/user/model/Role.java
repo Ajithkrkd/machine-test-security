@@ -1,5 +1,6 @@
 package com.ajith.security.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,10 +11,6 @@ public class Role {
     @GeneratedValue (strategy = GenerationType.AUTO )
     private int roleId;
     private String roleName;
-    private String roleDescription;
-    private boolean isDeleted;
-
-    @OneToOne (mappedBy = "role")
-    private User user;
+    private boolean isDeleted =false;
 
 }

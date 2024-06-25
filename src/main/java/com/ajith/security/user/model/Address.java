@@ -1,10 +1,14 @@
 package com.ajith.security.user.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO )
@@ -14,7 +18,5 @@ public class Address {
     private String city;
     private String country;
     private Long postalCode;
-    private boolean isDeleted;
-    @OneToOne (mappedBy = "address")
-    private User user;
+
 }

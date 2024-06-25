@@ -1,13 +1,9 @@
 package com.ajith.security.user.model;
 
 
-import com.ajith.security.user.model.Address;
-import com.ajith.security.user.model.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +15,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
+@Table(name = "userEntity")
 public class User implements UserDetails {
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO )
@@ -30,6 +28,8 @@ public class User implements UserDetails {
     private String password;
     private boolean isBlocked =false;
     private boolean isActive = false;
+
+    @JsonIgnore
     @OneToOne
     @JoinColumn (name = "address_id")
     private Address address;
