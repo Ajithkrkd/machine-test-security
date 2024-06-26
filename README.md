@@ -174,3 +174,12 @@ baseurl = http://localhost:8080/api/v1/admin/**
  POST /api/v1/users/change_password
 ```
 Here, I retrieve the user details from the token provided by the user who accesses this endpoint. This allows them to change their password based solely on their token.
+
+
+## API response Examples
+### user email already exist exception
+![image](https://github.com/Ajithkrkd/Pedal_Planet_Ecommerce/assets/131735228/2b07fe84-a453-4be9-b191-c4c1117f1fcb)
+
+### user success login
+
+![image](https://github.com/Ajithkrkd/Pedal_Planet_Ecommerce/assets/131735228/f0f7d8cf-9aab-4f20-b329-bdbfe8d2f1d5)
