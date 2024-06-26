@@ -1,5 +1,5 @@
 
-# Authentication And Authorization with Audit Log , Spring Security
+# Authentication And Authorization with Audit Log , Spring Security ,Custom TaskExcecutionTime Annotation
 
 ## Overview
 This project provides a collection of REST API endpoints for authentication and authorization using Spring Security with JWT tokens. Additionally, it incorporates auditing capabilities using Aspect-Oriented Programming (AOP).
@@ -12,6 +12,7 @@ This project provides a collection of REST API endpoints for authentication and 
   - [Running the Application](#running-the-application)
   - [Accessing the API](#accessing-the-api)
   - [Additional Notes](#additional-notes)
+  - [Custome annotation](#custom-annotation)
 
 
 ## Project Setup
@@ -183,3 +184,9 @@ Here, I retrieve the user details from the token provided by the user who access
 ### user success login
 
 ![image](https://github.com/Ajithkrkd/Pedal_Planet_Ecommerce/assets/131735228/f0f7d8cf-9aab-4f20-b329-bdbfe8d2f1d5)
+
+### Custome annotation for checking the time to excecute a method
+1. implemented a custom annotation which will calculate the time to excecute a method. we can simply annotate this annotation  to any method it will log the time taken to complete the method 
+![image](https://github.com/Ajithkrkd/machine-test-security/assets/131735228/0f9a1199-d3ba-4c02-8723-398dd21706ac)
+
+![image](https://github.com/Ajithkrkd/machine-test-security/assets/131735228/1453dc3e-2a87-4a63-89ae-0354aef6983d)
