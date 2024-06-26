@@ -4,6 +4,7 @@ import com.ajith.security.admin.dto.RoleRequest;
 import com.ajith.security.exceptions.CustomRoleNotFoundException;
 import com.ajith.security.exceptions.NoAccessException;
 import com.ajith.security.exceptions.RoleAlreadyExistException;
+import com.ajith.security.exceptions.UserNotFoundException;
 import com.ajith.security.roles.model.Role;
 import com.ajith.security.roles.repository.RoleRepository;
 import com.ajith.security.user.dto.BasicResponse;
@@ -72,33 +73,64 @@ public class RoleService implements IRoleService {
     }
 
     @Override
-    public ResponseEntity < BasicResponse > deleteRoleById (Integer roleId) {
-        try{
+    public ResponseEntity<BasicResponse> deleteRoleById(Integer roleId) {
+        try {
+            System.out.println ("entered to this " );
             Role role = roleRepository.findById ( roleId )
-                    .orElseThrow (()->new RoleNotFoundException ( "Role " + roleId + " not available") );
-            if( role.equals ( "ROLE_ADMIN" )){
-                throw new NoAccessException ("you don't have permission to access this role");
+                    .orElseThrow (()-> new RoleNotFoundException ( "Role " + roleId + " not available") );
+
+            System.out.println (role.getRoleName () +"--------------------------------role");
+            if ("ROLE_ADMIN".equals(role.getRoleName())) {
+                System.out.println (role +"--------------------------------role");
+                throw new NoAccessException("You don't have permission to access this role");
             }
-            List< User > usersList = userRepository.findAll ();
+
+            List<User> usersList = userRepository.findAll();
             usersList.stream()
-                    .filter(user -> user.getRole().getRoleId () == (roleId))
+                    .filter(user -> user.getRole() != null && user.getRole().getRoleId() ==(roleId))
                     .forEach(user -> {
                         user.setRole(null);
                         userRepository.save(user);
                     });
-        roleRepository.delete ( role );
-        return  ResponseEntity.status ( HttpStatus.OK ).body (
-                BasicResponse.builder ()
-                        .message ( "role " +role.getRoleName () + " deleted successfully" )
-                        .description ( "you have successfully deleted role and removed assigned roles from user" )
-                        .timestamp ( LocalDateTime.now (  ) )
-                        .build ());
-        }catch (RoleNotFoundException e){
-            throw new CustomRoleNotFoundException ( e.getMessage () );
+
+            roleRepository.delete(role);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(BasicResponse.builder()
+                            .message("Role " + role.getRoleName() + " deleted successfully")
+                            .description("Successfully deleted role and removed assigned roles from users")
+                            .timestamp(LocalDateTime.now())
+                            .build());
+        } catch (RoleNotFoundException e) {
+        System.out.println ("role not found catch block" );
+            throw new CustomRoleNotFoundException(e.getMessage());
+        } catch (NoAccessException e) {
+            log.info("Attempted to delete admin role");
+            throw new NoAccessException(e.getMessage());
         }
-        catch (NoAccessException e){
-            log.info ( "trying to access admin role id" );
-            throw new NoAccessException ( e.getMessage () );
+    }
+
+
+    @Override
+    public ResponseEntity < BasicResponse > assignRoleById (Integer userId, Integer roleId) {
+        try{
+            Role role = roleRepository.findById ( roleId )
+                    .orElseThrow (()->new CustomRoleNotFoundException ( "Role " + roleId + " not available") );
+            User user = userRepository.findById ( userId ).orElseThrow (
+                    ()->new UserNotFoundException ( "user does not exist can't assign role" )
+            );
+            user.setRole ( role );
+            userRepository.save ( user );
+            return ResponseEntity.status ( HttpStatus.OK ).body ( BasicResponse.builder ()
+                    .message ( "user role assigned as " + role.getRoleName () )
+                    .description ( "user assigned new role " )
+                    .timestamp ( LocalDateTime.now (  ) )
+                    .build ());
+
+        }catch (CustomRoleNotFoundException e){
+            throw new CustomRoleNotFoundException ( e.getMessage () );
+        }catch (UserNotFoundException e){
+            throw new UserNotFoundException ( e.getMessage () );
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.ajith.security.auth;
 
+import com.ajith.security.aop.annotations.TaskExecutionTime;
 import com.ajith.security.auth.AuthenticationService;
 import com.ajith.security.user.dto.BasicResponse;
 import com.ajith.security.user.dto.LoginRequest;
@@ -19,6 +20,7 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
+    @TaskExecutionTime
     @PostMapping ("/register")
     public ResponseEntity < BasicResponse > registerUser(@RequestBody RegistrationRequest request){
         ResponseEntity<BasicResponse> response = authenticationService.register(request);

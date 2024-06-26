@@ -35,4 +35,9 @@ public class RoleController {
         return iRoleService.deleteRoleById(roleId);
     }
 
+    @PostMapping("/assignRole/{userId}/{roleId}")
+    public ResponseEntity<BasicResponse> assignRole(@PathVariable ("userId") Integer userId, @PathVariable ("roleId") Integer roleId){
+        return iRoleService.assignRoleById(userId, roleId);
+    }
+
 }

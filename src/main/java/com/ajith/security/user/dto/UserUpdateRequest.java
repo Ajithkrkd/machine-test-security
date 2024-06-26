@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class UserUpdateRequest {
     private String fullName;
     private String phoneNumber;

@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Setter
+@ToString
 public class UserDetailsResponse {
     private int userId;
     private String fullName;

@@ -16,4 +16,6 @@ public interface IRoleService {
     ResponseEntity< Role> getRoleById (Integer roleId);
 
     ResponseEntity< BasicResponse> deleteRoleById (Integer roleId);
+
+    ResponseEntity< BasicResponse> assignRoleById (Integer userId, Integer roleId);
 }

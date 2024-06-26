@@ -99,8 +99,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(value = {CustomRoleNotFoundException.class})
     @ResponseStatus (value = HttpStatus.BAD_REQUEST)
-    public ErrorResponse roleNotFoundException(
-            CustomRoleNotFoundException ex, WebRequest request)
+    public ErrorResponse roleNotFoundException(CustomRoleNotFoundException ex, WebRequest request)
     {
         ErrorResponse message = new ErrorResponse();
         message.setMessage ( ex.getMessage() );
@@ -120,6 +119,5 @@ public class GlobalExceptionHandler {
         message.setTimestamp ( LocalDateTime.now ( ) );
         return message;
     }
-
 
 }

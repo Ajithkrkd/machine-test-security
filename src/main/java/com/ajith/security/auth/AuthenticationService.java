@@ -111,6 +111,8 @@ public class AuthenticationService {
             throw new CustomBadCredentialException ("email or password is incorrect");
         } catch (UsernameNotFoundException e) {
             throw new UsernameNotFoundException("Worker not found");
+        }catch (UserBlockedException e){
+            throw new UserBlockedException ( e.getMessage () );
         }
         catch (Exception e){
             throw new RuntimeException (e.getMessage ());

@@ -87,8 +87,8 @@ public class AddressService implements IAddressService {
                     .message ( "Address deleted successfully" )
                     .timestamp ( LocalDateTime.now () )
                     .build() );
-        } catch (Exception e){
-            throw new RuntimeException ( e.getMessage () );
+        } catch (MissingUserAddressException e){
+            throw new MissingUserAddressException ( e.getMessage () );
         }
     }
 
