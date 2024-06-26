@@ -12,4 +12,8 @@ public interface IRoleService {
     ResponseEntity< BasicResponse> createRole (RoleRequest roleRequest);
 
     ResponseEntity< List< Role>> getAllRoles ( );
+
+    ResponseEntity< Role> getRoleById (Integer roleId);
+
+    ResponseEntity< BasicResponse> deleteRoleById (Integer roleId);
 }

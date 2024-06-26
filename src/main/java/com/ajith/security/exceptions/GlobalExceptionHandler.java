@@ -21,6 +21,16 @@ public class GlobalExceptionHandler {
         message.setTimestamp ( LocalDateTime.now ( ) );
         return message;
     }
+    @ExceptionHandler (value = {UserNotFoundException.class})
+    @ResponseStatus (value = HttpStatus.BAD_REQUEST)
+    public ErrorResponse useNotFoundException(UserNotFoundException ex, WebRequest request)
+    {
+        ErrorResponse message = new ErrorResponse();
+        message.setMessage ( ex.getMessage() );
+        message.setDescription ( "you are trying to access a user with wrong information" );
+        message.setTimestamp ( LocalDateTime.now ( ) );
+        return message;
+    }
 
     @ExceptionHandler (value = {UserBlockedException.class})
     @ResponseStatus (value = HttpStatus.NOT_FOUND)
@@ -76,5 +86,40 @@ public class GlobalExceptionHandler {
         message.setTimestamp ( LocalDateTime.now ( ) );
         return message;
     }
+    @ExceptionHandler(value = {RoleAlreadyExistException.class})
+    @ResponseStatus (value = HttpStatus.BAD_REQUEST)
+    public ErrorResponse roleAlreadyExist(
+            RoleAlreadyExistException ex, WebRequest request)
+    {
+        ErrorResponse message = new ErrorResponse();
+        message.setMessage ( ex.getMessage() );
+        message.setDescription ("You are trying to create a role that already exists");
+        message.setTimestamp ( LocalDateTime.now ( ) );
+        return message;
+    }
+    @ExceptionHandler(value = {CustomRoleNotFoundException.class})
+    @ResponseStatus (value = HttpStatus.BAD_REQUEST)
+    public ErrorResponse roleNotFoundException(
+            CustomRoleNotFoundException ex, WebRequest request)
+    {
+        ErrorResponse message = new ErrorResponse();
+        message.setMessage ( ex.getMessage() );
+        message.setDescription ("You are trying to get a role that not  exists");
+        message.setTimestamp ( LocalDateTime.now ( ) );
+        return message;
+    }
+
+    @ExceptionHandler(value = {NoAccessException.class})
+    @ResponseStatus (value = HttpStatus.BAD_GATEWAY)
+    public ErrorResponse noAccessException(
+            NoAccessException ex, WebRequest request)
+    {
+        ErrorResponse message = new ErrorResponse();
+        message.setMessage ( ex.getMessage() );
+        message.setDescription ("you have no access to this action");
+        message.setTimestamp ( LocalDateTime.now ( ) );
+        return message;
+    }
+
 
 }

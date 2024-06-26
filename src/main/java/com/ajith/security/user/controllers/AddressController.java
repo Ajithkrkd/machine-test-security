@@ -36,11 +36,4 @@ public class AddressController {
         return response;
     }
 
-    @PostMapping("/update")
-    public ResponseEntity< BasicResponse > updateAddress(
-            @RequestBody AddressRequest request,
-            @RequestHeader("Authorization") String authHeader){
-        ResponseEntity<BasicResponse> response = iAddressService.updateAddress(request,authHeader);
-        return response;
-    }
 }

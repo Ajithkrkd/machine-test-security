@@ -12,5 +12,4 @@ public interface IAddressService {
 
     ResponseEntity< BasicResponse> deleteAddress (String authHeader);
 
-    ResponseEntity< BasicResponse> updateAddress (AddressRequest request, String authHeader);
 }

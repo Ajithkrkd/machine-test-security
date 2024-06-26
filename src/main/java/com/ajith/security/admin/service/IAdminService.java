@@ -9,7 +9,9 @@ import java.util.List;
 public interface IAdminService {
     ResponseEntity< List< UserDetailsResponse>> getAllUsers ( );
 
-    ResponseEntity< BasicResponse> toggleUserblockStatus (Integer userId);
+    ResponseEntity< BasicResponse> toggleUserBlockStatus (Integer userId);
 
-    ResponseEntity< UserDetailsResponse> getUserDetails (Integer userId);
+
+
+    void createAdmin ( );
 }

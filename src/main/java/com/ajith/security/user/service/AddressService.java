@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,13 +27,27 @@ public class AddressService implements IAddressService {
     public ResponseEntity < BasicResponse > addAddress (AddressRequest request,String authHeader) {
         try {
             User user = jwtService.extractUserFromAuthHeader ( authHeader );
-            Address newAddress = mappAddressRequestToAddress ( request );
+            Address existingAddress = user.getAddress ();
+            Address newAddress;
+
+            if(existingAddress != null){
+                newAddress = updateOldAddressWithNewOne (existingAddress ,request);
+            }else{
+                 newAddress = mappAddressRequestToAddress ( request );
+            }
+
             Address savedAddress = addressRepository.save ( newAddress );
             user.setAddress ( savedAddress );
             userRepository.save ( user );
+            String message;
+            if (existingAddress != null) {
+                message = "Address updated successfully for user " + user.getFullName();
+            } else {
+                message = "Address added to user " + user.getFullName() + " successfully";
+            }
             return ResponseEntity.status ( HttpStatus.CREATED ).body ( BasicResponse.builder()
-                            .description ( "Address added to user  "+ user.getFullName () + "  successfully")
-                            .message ( "Address added successfully" )
+                            .description ("you are working with address")
+                            .message (message)
                             .timestamp ( LocalDateTime.now () )
                     .build() );
         } catch (Exception e){
@@ -47,12 +60,14 @@ public class AddressService implements IAddressService {
         try {
             User user = jwtService.extractUserFromAuthHeader ( authHeader );
             Address address = user.getAddress ();
+            System.out.println (address + "---------------------------------------------------address" );
             if(address == null){
                 throw new MissingUserAddressException ("user does not have any address he need to add");
             }
             return ResponseEntity.status ( HttpStatus.OK ).body ( user.getAddress () );
-        } catch (Exception e){
-            throw new RuntimeException ( e.getMessage () );
+        } catch (MissingUserAddressException e){
+            System.out.println ("catch close excicuted" );
+            throw new MissingUserAddressException ( e.getMessage () );
         }
     }
 
@@ -77,23 +92,6 @@ public class AddressService implements IAddressService {
         }
     }
 
-    @Override
-    public ResponseEntity < BasicResponse > updateAddress (AddressRequest request, String authHeader) {
-        try {
-            User user = jwtService.extractUserFromAuthHeader ( authHeader );
-            Address newAddress = updateOldAddressWithNewOne(user.getAddress (),request);
-            Address savedAddress = addressRepository.save ( newAddress );
-            user.setAddress ( savedAddress );
-            userRepository.save ( user );
-            return ResponseEntity.status ( HttpStatus.CREATED ).body ( BasicResponse.builder()
-                    .description ( "Address updated to user  "+ user.getFullName () + "  successfully")
-                    .message ( "Address updated successfully" )
-                    .timestamp ( LocalDateTime.now () )
-                    .build() );
-        } catch (Exception e){
-            throw new RuntimeException ( e.getMessage () );
-        }
-    }
 
     private Address updateOldAddressWithNewOne (Address oldAddress, AddressRequest newAddress) {
         oldAddress.setCity ( newAddress.getCity ( ) );

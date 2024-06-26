@@ -25,6 +25,14 @@ public class RoleController {
         return iRoleService.getAllRoles();
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Role> getRole(@PathVariable ("id") Integer roleId){
+        return iRoleService.getRoleById(roleId);
+    }
 
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<BasicResponse> deleteRole(@PathVariable ("id") Integer roleId){
+        return iRoleService.deleteRoleById(roleId);
+    }
 
 }

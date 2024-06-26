@@ -2,6 +2,7 @@ package com.ajith.security.user.controllers;
 
 import com.ajith.security.user.dto.BasicResponse;
 import com.ajith.security.user.dto.ChangePasswordRequest;
+import com.ajith.security.user.dto.UserDetailsResponse;
 import com.ajith.security.user.dto.UserUpdateRequest;
 import com.ajith.security.user.iservice.IUserService;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,11 @@ public class UserController {
         return iUserService.updateUserDetails(userUpdateRequest,authHeader);
     }
 
-
+    @GetMapping("/details")
+    public ResponseEntity< UserDetailsResponse > getUserDetails(
+            @RequestHeader("Authorization") String authHeader
+    )
+    {
+        return iUserService.getUserDetailsFromAuthHeader(authHeader);
+    }
 }

@@ -69,6 +69,17 @@ public class AuthenticationService {
                 .build ();
         return user;
     }
+    private Role getUserRole() {
+    Optional<Role> userRole = roleRepository.findByRoleName("ROLE_USER");
+
+        if (userRole.isPresent()) {
+            return userRole.get();
+        } else {
+            Role newRole = new Role();
+            newRole.setRoleName("ROLE_USER");
+            return roleRepository.save(newRole);
+        }
+    }
 
     public ResponseEntity<LoginResponse> login (LoginRequest request) {
         try {
@@ -86,7 +97,8 @@ public class AuthenticationService {
             }
 
             var jwtToken = jwtServiceImpl.generateToken(user);
-
+            user.setActive ( true );
+            userRepository.save ( user );
             return
                     ResponseEntity.status ( HttpStatus.OK ).body (LoginResponse.builder()
                             .access_token (jwtToken)
@@ -105,19 +117,7 @@ public class AuthenticationService {
         }
     }
 
-    private Role getUserRole() {
-        Optional<Role> userRole = roleRepository.findAll().stream()
-                .filter(role -> role.getRoleName().equals("ROLE_USER"))
-                .findFirst();
 
-        if (userRole.isPresent()) {
-            return userRole.get();
-        } else {
-            Role newRole = new Role();
-            newRole.setRoleName("ROLE_USER");
-            return roleRepository.save(newRole);
-        }
-    }
 
 
     private static BasicResponse getResponse ( String message, String description ) {

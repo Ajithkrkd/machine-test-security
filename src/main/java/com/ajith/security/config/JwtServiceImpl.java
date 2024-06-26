@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,9 +27,6 @@ public class JwtServiceImpl {
     private String secretKey;
     @Value ( "${application.security.jwt.expiration}" )
     private long jwtExpiration ;
-
-    @Value ( "${application.security.jwt.refresh-token.expiration}" )
-    private long refreshExpiration ;
 
     private final UserRepository userRepository;
 
