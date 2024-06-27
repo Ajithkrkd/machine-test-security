@@ -1,6 +1,7 @@
 package com.ajith.security.config;
 
 import com.ajith.security.exceptions.AuthHeaderNotContainExpectedTokenException;
+import com.ajith.security.exceptions.JwtTokenInvalidException;
 import com.ajith.security.exceptions.UserNotFoundException;
 import com.ajith.security.user.model.User;
 import com.ajith.security.user.repository.UserRepository;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,22 +32,21 @@ public class JwtServiceImpl {
     private final UserRepository userRepository;
 
 
-    private  Key getSigningKey ( ) {
+    private SecretKey getSigningKey ( ) {
         byte[] keyBytes = Decoders.BASE64.decode (secretKey);
         return Keys.hmacShaKeyFor (keyBytes);
     }
     private Claims extractAllClaims(String token) {
         try {
             return Jwts.parser()
-                    .setSigningKey(secretKey)
-                    .parseClaimsJws(token)
+                    .verifyWith (getSigningKey ())
+                    .build ()
+                    .parseSignedClaims (token)
                     .getBody();
         } catch (ExpiredJwtException e) {
-            throw new RuntimeException("Token has expired", e);
+            throw new JwtTokenInvalidException ("Token has expired");
         } catch (SignatureException e) {
-            throw new RuntimeException("Invalid token signature", e);
-        } catch (Exception e) {
-            throw new RuntimeException("Error parsing token", e);
+            throw new JwtTokenInvalidException("Invalid token signature");
         }
     }
 
@@ -72,15 +72,18 @@ public class JwtServiceImpl {
     public  boolean isTokenValid (String token){
         try {
             Jwts.parser()
-                    .setSigningKey(getSigningKey ())
-                    .parseClaimsJws(token);
+                    .verifyWith (getSigningKey ())
+                    .build ()
+                    .parseSignedClaims (token);
             return true;
+        } catch (SignatureException e) {
+            throw new JwtTokenInvalidException ( "Invalid token signature" );
         }
         catch (ExpiredJwtException e){
-            throw new ExpiredJwtException(e.getHeader(),e.getClaims(),"Jwt token is expired");
+            throw new JwtTokenInvalidException("Jwt token is expired");
         }
         catch (InvalidClaimException e){
-            throw new JwtException("Jwt token is invalid");
+            throw new JwtTokenInvalidException("Jwt token is invalid");
         }
         catch (Exception e){
             throw new RuntimeException("Something is wrong with the jwt token validation");

@@ -120,4 +120,16 @@ public class GlobalExceptionHandler {
         return message;
     }
 
+    @ExceptionHandler(value = {JwtTokenInvalidException.class})
+    @ResponseStatus (value = HttpStatus.UNAUTHORIZED)
+    public ErrorResponse jwtTokenInvalidException(
+            JwtTokenInvalidException ex, WebRequest request)
+    {
+        ErrorResponse message = new ErrorResponse();
+        message.setMessage ( ex.getMessage() );
+        message.setDescription ("your token is invalid");
+        message.setTimestamp ( LocalDateTime.now ( ) );
+        return message;
+    }
+
 }
